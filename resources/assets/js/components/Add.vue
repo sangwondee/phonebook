@@ -10,20 +10,23 @@
           <div class="field">
             <label>Name : </label>
             <div class="control">
-              <input class="input" type="text" placeholder="Name" v-model="list.name">
+              <input class="input" type="text" placeholder="Name" :class="{'is-danger' : errors.name}" v-model="list.name">
             </div>
+            <small v-if="errors.name" class="has-text-danger">{{errors.name[0]}}</small>
           </div>
           <div class="field">
             <label>Phone : </label>
             <div class="control">
-              <input class="input" type="number" placeholder="Phone" v-model="list.phone">
+              <input class="input" type="number" :class="{'is-danger': errors.phone}" placeholder="Phone" v-model="list.phone">
             </div>
+            <small v-if="errors.phone" class="has-text-danger">{{errors.phone[0]}}</small>
           </div>
           <div class="field">
             <label>Email : </label>
             <div class="control">
-              <input class="input" type="email" placeholder="E-mail" v-model="list.email">
+              <input class="input" type="email" placeholder="E-mail"  :class="{'is-danger' : errors.email}" v-model="list.email">
             </div>
+            <small v-if="errors.email" class="has-text-danger">{{errors.email[0]}}</small>
           </div>
         </section>
         <footer class="modal-card-foot">
@@ -43,7 +46,8 @@
               name: '',
               phone: '',
               email: ''
-            }
+            },
+            errors:{}
           }
         },
         methods: {
@@ -52,7 +56,7 @@
             },
             save(){
               axios.post('/phonebook',this.$data.list).then((response)=> this.close())
-              .catch((error) => console.log(response))
+              .catch((error) => this.errors = error.response.data.errors)
             }
 
         }
